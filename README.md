@@ -28,17 +28,17 @@ To make these subagents available across *all* of your projects:
 
 ## Available Categories
 
-We have over 130 agents available across several domains:
+We have over 139 agents available across several domains:
 
-- **Core Development**: Essential development skills (e.g., `api-designer`, `backend-developer`, `frontend-developer`).
-- **Language Specialists**: Language-specific experts (e.g., `python-pro`, `typescript-pro`, `rust-engineer`).
+- **Core Development**: Essential development skills (e.g., `api-designer`, `backend-developer`, `frontend-developer`, `design-bridge`).
+- **Language Specialists**: Language-specific experts (e.g., `python-pro`, `typescript-pro`, `rust-engineer`, `fastapi-developer`, `symfony-specialist`, `expo-react-native-expert`).
 - **Infrastructure**: DevOps, cloud, and deployment specialists.
-- **Quality & Security**: Testing, security, and code quality experts.
-- **Data & AI**: Data engineering, ML, and AI specialists.
-- **Developer Experience**: Tooling and developer productivity experts.
+- **Quality & Security**: Testing, security, and code quality experts (e.g., `security-auditor`, `ai-writing-auditor`).
+- **Data & AI**: Data engineering, ML, and AI specialists (e.g., `llm-architect`, `reinforcement-learning-engineer`).
+- **Developer Experience**: Tooling and developer productivity experts (e.g., `dx-optimizer`, `readme-generator`).
 - **Specialized Domains**: Domain-specific technology experts.
-- **Business & Product**: Product management and business analysis.
-- **Meta & Orchestration**: Agent coordination and meta-programming.
+- **Business & Product**: Product management and business analysis (e.g., `product-manager`, `license-engineer`).
+- **Meta & Orchestration**: Agent coordination and meta-programming (e.g., `multi-agent-coordinator`, `agent-installer`).
 - **Research & Analysis**: Research, search, and analysis specialists.
 
 Browse the `.cursor/agents/` directory to see all the available markdown files.
