@@ -15,7 +15,16 @@ description: Invokes specialist subagents via the Task tool for complex tasks. U
   - Devops, CI/CD, pipelines → `devops-engineer`
   - Code quality, security, review after changes → `code-reviewer`
   - Python coding, type-safety, Pandas → `python-pro`
-  - (See `.cursor/agents/` for the full list of 130+ available subagents)
+  - FastAPI async APIs, Pydantic v2, ASGI → `fastapi-developer`
+  - Symfony, Doctrine ORM, API Platform, Messenger → `symfony-specialist`
+  - Expo/React Native mobile apps, EAS deployment → `expo-react-native-expert`
+  - Design system translation, DESIGN.md → `design-bridge`
+  - RL environments, policy optimization, sim-to-real → `reinforcement-learning-engineer`
+  - README generation, zero-hallucination docs → `readme-generator`
+  - AI writing pattern detection and removal → `ai-writing-auditor`
+  - Software licensing, compliance pipelines → `license-engineer`
+  - Browse and install agents from repositories → `agent-installer`
+  - (See `.cursor/agents/` for the full list of 139 available subagents)
 - **Broad exploration or multi-step codebase search** → `explore` (built-in subagent type)
 - **Git, shell, or command execution** → `shell` (built-in subagent type)
 
