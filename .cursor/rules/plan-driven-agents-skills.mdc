@@ -1,0 +1,33 @@
+---
+description: After a plan exists, install matching Cursor agents/skills into the project from the Cursor-Agent-Skill catalog.
+alwaysApply: true
+---
+
+# Plan-driven agents and skills
+
+Catalog source: [maverick8969/Cursor-Agent-Skill](https://github.com/maverick8969/Cursor-Agent-Skill) (clone or copy `.cursor/agents/` and `.cursor/skills/` from that layout).
+
+## When this applies
+
+Whenever you produce, adopt, or materially change a **multi-step implementation plan** for this workspace, treat the plan as the driver for which **project-local** Cursor assets should exist under `.cursor/agents/` and `.cursor/skills/`.
+
+## Before executing the plan
+
+1. **Map the plan to assets**  
+   For each major phase or risk area (API design, backend, frontend, infra/CI, security, data/ML, docs, etc.), list the **smallest** set of `*.md` agent files and optional skills (e.g. `call-subagents` when autonomous subagents are useful) that directly support those steps. Prefer specialists over generic overlap.
+
+2. **Resolve the catalog on disk** (first match wins)  
+   - If this workspace already contains the catalog layout, use its `.cursor/agents/` and `.cursor/skills/` as the source.  
+   - Otherwise use a local clone/checkout of the repo above if present on the machine.  
+   - Otherwise use `~/.cursor/agents/` and `~/.cursor/skills/` if the user installed globally per that README.
+
+3. **Install into the project**  
+   - Ensure `<workspace>/.cursor/agents/` exists. Copy any **missing** agent files the plan needs from the resolved catalog (same filename, e.g. `devops-engineer.md`). Do not remove unrelated agents already in the project.  
+   - For skills: copy whole skill directories (e.g. `.cursor/skills/call-subagents/` including `SKILL.md`) into `<workspace>/.cursor/skills/<skill-name>/` when the plan involves delegated specialist work or the user expects subagent-style execution.
+
+4. **Report**  
+   In the same turn (or immediately after copying), tell the user **which agent and skill paths** you added or confirmed present, tied to **which plan steps** they support.
+
+## If the catalog cannot be found
+
+State that clearly, link the README install steps from the repo above, and continue with the plan using only agents/skills already in the workspace—do not invent new catalog filenames.

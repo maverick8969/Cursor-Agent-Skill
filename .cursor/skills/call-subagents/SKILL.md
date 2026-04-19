@@ -1,6 +1,6 @@
 ---
 name: call-subagents
-description: Invokes specialist subagents via the Task tool for complex tasks. Use when the user asks to involve a specialist (e.g. "@api-designer"), or when a task clearly matches one of the provided .cursor/agents/ (like python-pro, backend-developer, devops-engineer, code-reviewer, etc.).
+description: Invokes specialist subagents via the Subagent tool for complex tasks. Use when the user asks to involve a specialist (e.g. "@api-designer"), or when a task clearly matches one of the provided .cursor/agents/ (like python-pro, backend-developer, devops-engineer, code-reviewer, etc.).
 ---
 
 # Call Subagents
@@ -24,22 +24,22 @@ description: Invokes specialist subagents via the Task tool for complex tasks. U
   - AI writing pattern detection and removal → `ai-writing-auditor`
   - Software licensing, compliance pipelines → `license-engineer`
   - Browse and install agents from repositories → `agent-installer`
-  - (See `.cursor/agents/` for the full list of 139 available subagents)
+  - (See `.cursor/agents/` for the full list of 140+ available subagents)
 - **Broad exploration or multi-step codebase search** → `explore` (built-in subagent type)
 - **Git, shell, or command execution** → `shell` (built-in subagent type)
 
-## How to Invoke Specialists (Task Tool)
+## How to Invoke Specialists (Subagent Tool)
 
-Use the **Task** tool to launch subagents. The `Task` tool requires a `subagent_type`. Because most custom project subagents (like `python-pro` or `devops-engineer`) aren't built-in types natively mapped to the tool, you must use the `generalPurpose` type and pass the agent's instructions into the prompt.
+Use the **Subagent** tool to launch subagents. The `Subagent` tool requires a `subagent_type`. Because most custom project subagents (like `python-pro` or `devops-engineer`) aren't built-in types natively mapped to the tool, you must use the `generalPurpose` type and pass the agent's instructions into the prompt.
 
-**Required Parameters for the Task Tool:**
+**Required Parameters for the Subagent Tool:**
 1. `subagent_type`: Set this to `generalPurpose`.
 2. `description`: Short (3–5 word) summary of the task.
 3. `prompt`: **CRITICAL:** You must include the contents of the `.cursor/agents/<agent-name>.md` file in the prompt so the subagent knows how to behave. 
 
 **Steps to Invoke a Specialist:**
 1. **Read** the corresponding agent file from `.cursor/agents/<agent-name>.md` using the Read tool.
-2. **Launch** the Task tool (subagent_type="generalPurpose") with a prompt structured like this:
+2. **Launch** the Subagent tool (`subagent_type="generalPurpose"`) with a prompt structured like this:
    ```text
    You are acting as the [Agent Name] specialist. 
    Here are your core instructions and checklists:
@@ -67,7 +67,7 @@ If the user asks what agents are available, or you need to find an appropriate a
 User: "Have the API designer propose an OpenAPI for the new readings endpoint."
 Action:
 1. Read `.cursor/agents/api-designer.md`.
-2. Call Task tool:
+2. Call Subagent tool:
    - `subagent_type`: `generalPurpose`
    - `description`: "Design readings API"
    - `prompt`: "You are the api-designer. [Insert api-designer.md content]. Context: Backend is in backend/api/server.js. Task: Design an OpenAPI 3.1 snippet for the readings resource. Return the spec snippet and a short rationale."
@@ -76,7 +76,7 @@ Action:
 User: "Get the python pro to review this script and add type hints."
 Action:
 1. Read `.cursor/agents/python-pro.md`.
-2. Call Task tool:
+2. Call Subagent tool:
    - `subagent_type`: `generalPurpose`
    - `description`: "Add python type hints"
    - `prompt`: "You are the python-pro. [Insert python-pro.md content]. Task: Review `scripts/process.py`, add complete type hints, and ensure PEP 8 compliance. Return the updated file contents."

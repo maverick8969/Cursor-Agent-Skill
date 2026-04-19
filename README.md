@@ -28,7 +28,7 @@ To make these subagents available across *all* of your projects:
 
 ## Available Categories
 
-We have over 139 agents available across several domains:
+We have over 140 agents available across several domains:
 
 - **Core Development**: Essential development skills (e.g., `api-designer`, `backend-developer`, `frontend-developer`, `design-bridge`).
 - **Language Specialists**: Language-specific experts (e.g., `python-pro`, `typescript-pro`, `rust-engineer`, `fastapi-developer`, `symfony-specialist`, `expo-react-native-expert`).
@@ -51,16 +51,32 @@ Each subagent is a simple markdown file (e.g., `api-designer.md`). When you ment
 
 We have also included a special Cursor Skill in this repository called `call-subagents` (located in `.cursor/skills/call-subagents/`). 
 
-If you install this skill (by moving the `.cursor/skills/` directory into your project), it teaches the primary Cursor Agent **how to spawn these subagents autonomously using the internal `Task` tool.**
+If you install this skill (by moving the `.cursor/skills/` directory into your project), it teaches the primary Cursor Agent **how to spawn these subagents autonomously using the internal `Subagent` tool.**
 
 When you ask Cursor: *"Have the devops engineer write a GitHub Action for this repo"*, the main Cursor Agent will:
 1. Realize it needs the `devops-engineer` persona.
 2. Read the instructions from `.cursor/agents/devops-engineer.md`.
-3. Launch a background subagent (via the Task tool) packed with those exact expert instructions to complete your request autonomously!
+3. Launch a background subagent (via the Subagent tool) packed with those exact expert instructions to complete your request autonomously!
+
+## Cursor / Composer 3 Compatibility
+
+This repository is compatible with current Cursor and Composer-era agent format expectations:
+
+- Custom agents live in `.cursor/agents/`.
+- Each agent file includes YAML frontmatter with `name`, `description`, and `model`.
+- `model: inherit` is the default in this repo; final runtime model selection can still vary based on planning mode, Max Mode availability, and admin/workspace policy restrictions.
 
 ## Contributing
 
 Contributions are welcome! If you'd like to add new subagents or improve existing ones, simply create or modify a `.md` file inside the `.cursor/agents/` directory with clear instructions for the AI to follow.
+
+Before opening a pull request, run the frontmatter validator from the repository root:
+
+```bash
+python3 scripts/validate_cursor_agents.py
+```
+
+CI runs the same check on every push and pull request.
 
 ## License
 
