@@ -24,22 +24,30 @@ description: Invokes specialist subagents via the Subagent tool for complex task
   - AI writing pattern detection and removal → `ai-writing-auditor`
   - Software licensing, compliance pipelines → `license-engineer`
   - Browse and install agents from repositories → `agent-installer`
-  - (See `.cursor/agents/` for the full list of 140+ available subagents)
+  - Node.js backends, APIs, CLIs → `node-specialist`
+  - UI flows, components, and UX heuristics (not only WCAG) → `ui-ux-tester`
+  - Healthcare IT, HIPAA-aware workflows → `healthcare-admin`
+  - Repo-wide refactors with approval gates → `codebase-orchestrator`
+  - (See `.cursor/agents/` for the full list of 144 catalog subagents)
 - **Broad exploration or multi-step codebase search** → `explore` (built-in subagent type)
 - **Git, shell, or command execution** → `shell` (built-in subagent type)
 
 ## How to Invoke Specialists (Subagent Tool)
 
-Use the **Subagent** tool to launch subagents. The `Subagent` tool requires a `subagent_type`. Because most custom project subagents (like `python-pro` or `devops-engineer`) aren't built-in types natively mapped to the tool, you must use the `generalPurpose` type and pass the agent's instructions into the prompt.
+Use the **Subagent** tool to launch subagents. The tool requires a `subagent_type` and a self-contained `prompt`.
 
-**Required Parameters for the Subagent Tool:**
-1. `subagent_type`: Set this to `generalPurpose`.
+**Preferred (Composer / current Cursor):** If the Subagent tool exposes your specialist id in its `subagent_type` enum (for example `python-pro`, `devops-engineer`, `explore`, or `shell`), set `subagent_type` to that id so the runtime can attach the matching persona. Still write a **fully self-contained** `prompt` (paths, constraints, expected return shape); the parent chat is not automatically visible to the subagent.
+
+**Fallback:** If the specialist id is **not** accepted as `subagent_type` in your environment, use `generalPurpose` and paste the **entire** contents of `.cursor/agents/<agent-name>.md` into the prompt as the specialist instructions.
+
+**Required parameters**
+1. `subagent_type`: Specialist id when listed by the tool, otherwise `generalPurpose` (or another allowed built-in such as `explore` / `shell` when those fit better).
 2. `description`: Short (3–5 word) summary of the task.
-3. `prompt`: **CRITICAL:** You must include the contents of the `.cursor/agents/<agent-name>.md` file in the prompt so the subagent knows how to behave. 
+3. `prompt`: Task plus context; when using `generalPurpose` for a catalog specialist, include the full agent markdown from step 1 below.
 
-**Steps to Invoke a Specialist:**
-1. **Read** the corresponding agent file from `.cursor/agents/<agent-name>.md` using the Read tool.
-2. **Launch** the Subagent tool (`subagent_type="generalPurpose"`) with a prompt structured like this:
+**Steps to invoke a catalog specialist**
+1. **Read** `.cursor/agents/<agent-name>.md` when you need the exact wording (required if using `generalPurpose` with pasted instructions).
+2. **Launch** the Subagent tool with a prompt structured like this (when using `generalPurpose`):
    ```text
    You are acting as the [Agent Name] specialist. 
    Here are your core instructions and checklists:
@@ -66,17 +74,14 @@ If the user asks what agents are available, or you need to find an appropriate a
 **Example 1 – API Designer**
 User: "Have the API designer propose an OpenAPI for the new readings endpoint."
 Action:
-1. Read `.cursor/agents/api-designer.md`.
+1. Read `.cursor/agents/api-designer.md` if you will use `generalPurpose`, or skip if `api-designer` is accepted as `subagent_type`.
 2. Call Subagent tool:
-   - `subagent_type`: `generalPurpose`
+   - `subagent_type`: `api-designer` when the tool lists it; otherwise `generalPurpose`
    - `description`: "Design readings API"
-   - `prompt`: "You are the api-designer. [Insert api-designer.md content]. Context: Backend is in backend/api/server.js. Task: Design an OpenAPI 3.1 snippet for the readings resource. Return the spec snippet and a short rationale."
+   - `prompt`: If `generalPurpose`: paste full `api-designer.md` then add: "Context: Backend is in backend/api/server.js. Task: Design an OpenAPI 3.1 snippet for the readings resource. Return the spec snippet and a short rationale." If `api-designer`: same task block with paths and return shape; include any constraints the parent turn relied on.
 
 **Example 2 – Python Pro**
 User: "Get the python pro to review this script and add type hints."
 Action:
-1. Read `.cursor/agents/python-pro.md`.
-2. Call Subagent tool:
-   - `subagent_type`: `generalPurpose`
-   - `description`: "Add python type hints"
-   - `prompt`: "You are the python-pro. [Insert python-pro.md content]. Task: Review `scripts/process.py`, add complete type hints, and ensure PEP 8 compliance. Return the updated file contents."
+1. Same pattern: `python-pro` when accepted, else `generalPurpose` plus full `python-pro.md`.
+2. `prompt` must include `scripts/process.py`, type-hint expectations, and "return updated file contents".

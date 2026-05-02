@@ -28,17 +28,17 @@ To make these subagents available across *all* of your projects:
 
 ## Available Categories
 
-We have over 140 agents available across several domains:
+We have **144** catalog agents (synced from [VoltAgent/awesome-claude-code-subagents](https://github.com/VoltAgent/awesome-claude-code-subagents)) across several domains:
 
 - **Core Development**: Essential development skills (e.g., `api-designer`, `backend-developer`, `frontend-developer`, `design-bridge`).
-- **Language Specialists**: Language-specific experts (e.g., `python-pro`, `typescript-pro`, `rust-engineer`, `fastapi-developer`, `symfony-specialist`, `expo-react-native-expert`).
+- **Language Specialists**: Language-specific experts (e.g., `python-pro`, `typescript-pro`, `node-specialist`, `rust-engineer`, `fastapi-developer`, `symfony-specialist`, `expo-react-native-expert`).
 - **Infrastructure**: DevOps, cloud, and deployment specialists.
-- **Quality & Security**: Testing, security, and code quality experts (e.g., `security-auditor`, `ai-writing-auditor`).
+- **Quality & Security**: Testing, security, and code quality experts (e.g., `security-auditor`, `ai-writing-auditor`, `ui-ux-tester`, `accessibility-tester`).
 - **Data & AI**: Data engineering, ML, and AI specialists (e.g., `llm-architect`, `reinforcement-learning-engineer`).
 - **Developer Experience**: Tooling and developer productivity experts (e.g., `dx-optimizer`, `readme-generator`).
-- **Specialized Domains**: Domain-specific technology experts.
+- **Specialized Domains**: Domain-specific technology experts (e.g., `healthcare-admin`).
 - **Business & Product**: Product management and business analysis (e.g., `product-manager`, `license-engineer`).
-- **Meta & Orchestration**: Agent coordination and meta-programming (e.g., `multi-agent-coordinator`, `agent-installer`).
+- **Meta & Orchestration**: Agent coordination and meta-programming (e.g., `multi-agent-coordinator`, `agent-installer`, `codebase-orchestrator`).
 - **Research & Analysis**: Research, search, and analysis specialists.
 
 Browse the `.cursor/agents/` directory to see all the available markdown files.
@@ -69,6 +69,14 @@ This repository is compatible with current Cursor and Composer-era agent format 
 ## Contributing
 
 Contributions are welcome! If you'd like to add new subagents or improve existing ones, simply create or modify a `.md` file inside the `.cursor/agents/` directory with clear instructions for the AI to follow.
+
+### Refreshing from VoltAgent upstream
+
+This catalog tracks [VoltAgent/awesome-claude-code-subagents](https://github.com/VoltAgent/awesome-claude-code-subagents). To pull the latest agent definitions and convert them to Cursor frontmatter (`model: inherit`, no `tools` line, optional path normalization):
+
+1. Clone the upstream repo (for example `git clone --depth 1 https://github.com/VoltAgent/awesome-claude-code-subagents.git _upstream-awesome`). The `_upstream-awesome/` path is gitignored if you clone inside this workspace.
+2. Run `python3 scripts/sync_agents_from_upstream.py` (or pass `--upstream /path/to/clone`).
+3. The sync script intentionally **does not** overwrite fork-specific agents: `agent-installer` and `design-bridge`. Merge upstream changes into those by hand when appropriate.
 
 Before opening a pull request, run the frontmatter validator from the repository root:
 
