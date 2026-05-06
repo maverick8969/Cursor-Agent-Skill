@@ -1,0 +1,49 @@
+{
+  "catalog_dir": "/Users/joshtoman/Documents/GitHub/Cursor Agent Skill/.cursor/_catalog/wshobson",
+  "detected_commands": [
+    "feature-development",
+    "security-dependencies",
+    "security-hardening",
+    "security-sast",
+    "typescript-scaffold"
+  ],
+  "installed_agents": [
+    "backend-architect",
+    "event-sourcing-architect",
+    "graphql-architect",
+    "javascript-pro",
+    "performance-engineer",
+    "security-auditor",
+    "tdd-orchestrator",
+    "temporal-python-pro",
+    "test-automator",
+    "threat-modeling-expert",
+    "typescript-pro"
+  ],
+  "installed_skills": [
+    "api-design-principles",
+    "architecture-patterns",
+    "attack-tree-construction",
+    "cqrs-implementation",
+    "event-store-design",
+    "javascript-testing-patterns",
+    "microservices-patterns",
+    "modern-javascript-patterns",
+    "nodejs-backend-patterns",
+    "projection-patterns",
+    "saga-orchestration",
+    "sast-configuration",
+    "security-requirement-extraction",
+    "stride-analysis-patterns",
+    "temporal-python-testing",
+    "threat-mitigation-mapping",
+    "typescript-advanced-types",
+    "workflow-orchestration-patterns"
+  ],
+  "selected_plugins": [
+    "backend-development",
+    "javascript-typescript",
+    "security-scanning"
+  ],
+  "source": "wshobson/agents"
+}
