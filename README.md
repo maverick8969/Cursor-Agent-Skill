@@ -66,25 +66,71 @@ This repository is compatible with current Cursor and Composer-era agent format 
 - Each agent file includes YAML frontmatter with `name`, `description`, and `model`.
 - `model: inherit` is the default in this repo; final runtime model selection can still vary based on planning mode, Max Mode availability, and admin/workspace policy restrictions.
 
-## Contributing
+## Hybrid Claude-to-Cursor Sync
 
-Contributions are welcome! If you'd like to add new subagents or improve existing ones, simply create or modify a `.md` file inside the `.cursor/agents/` directory with clear instructions for the AI to follow.
+This repo now supports a hybrid workflow:
 
-### Refreshing from VoltAgent upstream
+- Keep Cursor-native outputs in `.cursor/agents` and `.cursor/skills`.
+- Build a plugin-aware catalog from [wshobson/agents](https://github.com/wshobson/agents) for selective installs that feel closer to Claude plugin selection.
 
-This catalog tracks [VoltAgent/awesome-claude-code-subagents](https://github.com/VoltAgent/awesome-claude-code-subagents). To pull the latest agent definitions and convert them to Cursor frontmatter (`model: inherit`, no `tools` line, optional path normalization):
+### Why this differs from Claude plugin install
 
-1. Clone the upstream repo (for example `git clone --depth 1 https://github.com/VoltAgent/awesome-claude-code-subagents.git _upstream-awesome`). The `_upstream-awesome/` path is gitignored if you clone inside this workspace.
-2. Run `python3 scripts/sync_agents_from_upstream.py` (or pass `--upstream /path/to/clone`).
-3. The sync script intentionally **does not** overwrite fork-specific agents: `agent-installer` and `design-bridge`. Merge upstream changes into those by hand when appropriate.
+Claude installs plugin bundles directly. Cursor reads flat local files.  
+To bridge that, this repo generates a local plugin index and then installs selected plugin contents into Cursor's flat directories.
 
-Before opening a pull request, run the frontmatter validator from the repository root:
+### 1) Build catalog from `wshobson/agents`
+
+```bash
+git clone --depth 1 https://github.com/wshobson/agents.git _upstream-wshobson
+python3 scripts/sync_wshobson_to_cursor.py --upstream _upstream-wshobson
+```
+
+This creates:
+
+- `.cursor/_catalog/wshobson/agents/*.md`
+- `.cursor/_catalog/wshobson/skills/<skill-name>/...`
+- `.cursor/_catalog/wshobson/plugin-index.json`
+
+The sync step normalizes agent output for Cursor (`model: inherit` by default), rewrites Claude path references to Cursor paths, and records plugin-to-agent/skill mapping metadata in the index.
+
+### 2) Install selected plugins into Cursor directories
+
+Install all synced plugins:
+
+```bash
+python3 scripts/install_wshobson_plugin_subset.py --all
+```
+
+Install by plugin name:
+
+```bash
+python3 scripts/install_wshobson_plugin_subset.py --plugin python-development --plugin backend-development
+```
+
+Install by category:
+
+```bash
+python3 scripts/install_wshobson_plugin_subset.py --category security --category infrastructure
+```
+
+If existing destination files differ and you intentionally want to replace them, add `--force`.
+
+### 3) Validate agents plus generated catalog
 
 ```bash
 python3 scripts/validate_cursor_agents.py
 ```
 
-CI runs the same check on every push and pull request.
+Validation now checks:
+
+- `.cursor/agents/*.md` frontmatter and naming
+- `.cursor/_catalog/wshobson/plugin-index.json` (when present)
+- catalog skill integrity (`SKILL.md` exists and matches directory name)
+- index references to catalog agents and skills
+
+## Contributing
+
+Contributions are welcome. For direct edits, update `.cursor/agents/*.md` or `.cursor/skills/<name>/SKILL.md`. For upstream refreshes, prefer scripted sync from `wshobson/agents` and review collisions/warnings before installing into active Cursor directories.
 
 ## License
 
