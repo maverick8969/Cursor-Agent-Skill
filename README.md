@@ -121,6 +121,18 @@ If existing destination files differ and you intentionally want to replace them,
 python3 scripts/validate_cursor_agents.py
 ```
 
+### 4) Restore archived curated agents (optional)
+
+If you archived agents during curation and want to re-enable them:
+
+```bash
+# Restore one or more archived agents
+python3 scripts/restore_archived_agents.py --agent slack-expert --agent wordpress-master
+
+# Restore every archived agent
+python3 scripts/restore_archived_agents.py --all
+```
+
 Validation now checks:
 
 - `.cursor/agents/*.md` frontmatter and naming
