@@ -99,7 +99,7 @@ def validate_agent(path: Path) -> list[str]:
     return errors
 
 
-def validate_skill_dir(path: Path) -> list[str]:
+def validate_skill_dir(path: Path, *, require_name_matches_dir: bool = False) -> list[str]:
     errors: list[str] = []
     skill_md = path / "SKILL.md"
     if not skill_md.is_file():
@@ -118,6 +118,11 @@ def validate_skill_dir(path: Path) -> list[str]:
     for key in ("name", "description"):
         if key not in fields or not fields[key].strip():
             errors.append(f"{skill_md.relative_to(REPO_ROOT)}: frontmatter key {key!r} must be non-empty")
+
+    if require_name_matches_dir and "name" in fields and fields["name"].strip() != path.name:
+        errors.append(
+            f"{skill_md.relative_to(REPO_ROOT)}: name {fields['name']!r} must match directory {path.name!r}"
+        )
 
     return errors
 
@@ -170,8 +175,18 @@ def validate_catalog(catalog_dir: Path) -> list[str]:
     for agent_file in sorted(agents_dir.glob("*.md")):
         errors.extend(validate_agent(agent_file))
     for skill_dir in sorted(p for p in skills_dir.iterdir() if p.is_dir()):
-        errors.extend(validate_skill_dir(skill_dir))
+        errors.extend(validate_skill_dir(skill_dir, require_name_matches_dir=False))
 
+    return errors
+
+
+def validate_project_skills() -> list[str]:
+    skills_dir = REPO_ROOT / ".cursor" / "skills"
+    if not skills_dir.is_dir():
+        return []
+    errors: list[str] = []
+    for skill_dir in sorted(p for p in skills_dir.iterdir() if p.is_dir()):
+        errors.extend(validate_skill_dir(skill_dir, require_name_matches_dir=True))
     return errors
 
 
@@ -197,6 +212,7 @@ def main() -> int:
     all_errors: list[str] = []
     for path in md_files:
         all_errors.extend(validate_agent(path))
+    all_errors.extend(validate_project_skills())
     all_errors.extend(validate_catalog(args.catalog_dir.resolve()))
 
     if all_errors:

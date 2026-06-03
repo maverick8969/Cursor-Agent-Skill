@@ -28,7 +28,7 @@ To make these subagents available across *all* of your projects:
 
 ## Available Categories
 
-We have **144** catalog agents (synced from [VoltAgent/awesome-claude-code-subagents](https://github.com/VoltAgent/awesome-claude-code-subagents)) across several domains:
+We ship **122** active catalog agents in `.cursor/agents/` (synced from [VoltAgent/awesome-claude-code-subagents](https://github.com/VoltAgent/awesome-claude-code-subagents) and [wshobson/agents](https://github.com/wshobson/agents)) across several domains:
 
 - **Core Development**: Essential development skills (e.g., `api-designer`, `backend-developer`, `frontend-developer`, `design-bridge`).
 - **Language Specialists**: Language-specific experts (e.g., `python-pro`, `typescript-pro`, `node-specialist`, `rust-engineer`, `fastapi-developer`, `symfony-specialist`, `expo-react-native-expert`).
@@ -51,20 +51,25 @@ Each subagent is a simple markdown file (e.g., `api-designer.md`). When you ment
 
 We have also included a special Cursor Skill in this repository called `call-subagents` (located in `.cursor/skills/call-subagents/`). 
 
-If you install this skill (by moving the `.cursor/skills/` directory into your project), it teaches the primary Cursor Agent **how to spawn these subagents autonomously using the internal `Subagent` tool.**
+If you install this skill (by copying `.cursor/skills/` into your project), it teaches the primary Cursor Agent **how to spawn these subagents autonomously using the Task tool** (`subagent_type`, `description`, `prompt`).
 
 When you ask Cursor: *"Have the devops engineer write a GitHub Action for this repo"*, the main Cursor Agent will:
 1. Realize it needs the `devops-engineer` persona.
-2. Read the instructions from `.cursor/agents/devops-engineer.md`.
-3. Launch a background subagent (via the Subagent tool) packed with those exact expert instructions to complete your request autonomously!
+2. Read the instructions from `.cursor/agents/devops-engineer.md` when needed.
+3. Launch a background subagent via the Task tool (optionally `run_in_background: true`) with a self-contained prompt to complete your request autonomously.
 
-## Cursor / Composer 3 Compatibility
+## Cursor format reference
 
-This repository is compatible with current Cursor and Composer-era agent format expectations:
+This repository matches current Cursor expectations:
 
-- Custom agents live in `.cursor/agents/`.
-- Each agent file includes YAML frontmatter with `name`, `description`, and `model`.
-- `model: inherit` is the default in this repo; final runtime model selection can still vary based on planning mode, Max Mode availability, and admin/workspace policy restrictions.
+| Asset | Location | Frontmatter |
+|-------|----------|-------------|
+| Subagents | `.cursor/agents/*.md` or `~/.cursor/agents/*.md` | `name`, `description`, `model` (use `inherit` unless you need a specific id) |
+| Skills | `.cursor/skills/<name>/SKILL.md` | `name`, `description`; optional `disable-model-invocation: true` for explicit-only skills |
+
+- Mention agents with `@agent-name` in chat, or delegate via the **Task** tool when the `call-subagents` skill is installed.
+- `model: inherit` is the default; runtime selection still depends on plan mode, Max Mode, and workspace policy.
+- Do not use Claude-only frontmatter (`color`, `tools`) in Cursor agent files — they are ignored.
 
 ## Hybrid Claude-to-Cursor Sync
 
